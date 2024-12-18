@@ -1,35 +1,33 @@
-import java.util.LinkedList;
-
-class Buffer<T> { // Generická třída pro práci s různými datovými typy
-    private final LinkedList<T> list;
+class Buffer {
+    private final Queue queue;
     private final int capacity;
 
     public Buffer(int capacity) {
-        this.list = new LinkedList<>();
+        this.queue = new Queue();
         this.capacity = capacity;
     }
 
-    // Producent: Přidání prvku do bufferu
-    public synchronized void put(T data) throws InterruptedException {
-        while (list.size() == capacity) {
-            wait(); // Pokud je buffer plný, čeká na konzumenta
+    public synchronized void put(String url) throws InterruptedException {
+        while (queue.size() == capacity) {
+            System.out.println("Buffer je plný! Producent čeká na místo v bufferu.");
+            wait();
         }
-        list.add(data);
-        System.out.println("Producent vložil: " + data);
-        notify(); // Oznámí čekajícího konzumenta, že jsou dostupná data
+        queue.enqueue(url);
+        System.out.println("Producent vložil URL: " + url);
+        notify();
     }
 
-    // Konzument: Odebrání prvku z bufferu
-    public synchronized T take() throws InterruptedException {
-        while (list.isEmpty()) {
-            wait(); // Pokud je buffer prázdný, čeká na producenta
+
+    public synchronized String take() throws InterruptedException {
+        while (queue.isEmpty()) {
+            wait();
         }
-        T data = list.removeFirst();
-        notify(); // Oznámí čekajícího producenta, že je místo pro nová data
-        return data;
+        String url = queue.dequeue();
+        notify();
+        return url;
     }
 
     public synchronized boolean isEmpty() {
-        return list.isEmpty();
+        return queue.isEmpty();
     }
 }

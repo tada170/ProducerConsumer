@@ -1,9 +1,9 @@
 import java.util.Scanner;
 
 class Producer implements Runnable {
-    private final Buffer<String> buffer;
+    private final Buffer buffer;
 
-    public Producer(Buffer<String> buffer) {
+    public Producer(Buffer buffer) {
         this.buffer = buffer;
     }
 
@@ -20,12 +20,20 @@ class Producer implements Runnable {
                     break;
                 }
 
-                buffer.put(url); // Přidání URL do bufferu
-                System.out.println("Producent přidal URL: " + url);
+                if (isValidUrl(url)) {
+                    buffer.put(url);
+                    System.out.println("Producent přidal URL: " + url);
+                } else {
+                    System.out.println("Neplatná URL! Ujistěte se, že URL začíná na 'http://' nebo 'https://'.");
+                }
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             System.err.println("Producent byl přerušen.");
         }
+    }
+
+    private boolean isValidUrl(String url) {
+        return url != null && (url.startsWith("http://") || url.startsWith("https://"));
     }
 }

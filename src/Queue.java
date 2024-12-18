@@ -1,35 +1,30 @@
-class Queue<I extends Number> {
-    private static LinkedList list = new LinkedList();
+class Queue {
+    private final LinkedList list;
 
     public Queue() {
-        list = new LinkedList();
+        this.list = new LinkedList();
     }
 
-    // Přidání prvku na konec fronty (enqueue)
-    public void enqueue(int data) {
-        list.add(data);
+    public void enqueue(String url) {
+        list.add(url);
     }
 
-    // Odebrání prvku z fronty (dequeue)
-    public int dequeue() {
+    public String dequeue() {
         if (list.isEmpty()) {
-            throw new IllegalStateException("Fronta je prázdná");
+            throw new IllegalStateException("Queue is empty");
         }
         return list.remove();
     }
 
-    // Získání velikosti fronty
     public int size() {
         return list.size();
     }
 
-    public static boolean isEmpty() {
+    public boolean isEmpty() {
         return list.isEmpty();
     }
 
-    // Zobrazení obsahu fronty (pro testování)
     public void display() {
         list.display();
     }
-
 }
